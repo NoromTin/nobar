@@ -12,17 +12,17 @@ setup(
   description='Usefull progress "bar"',
   long_description=readme(),
   long_description_content_type='text/markdown',
-  url='home_link',
+  url='https://github.com/NoromTin/nobar',
   packages=find_packages(),
   install_requires=['requests>=2.25.1'],
   classifiers=[
     'Programming Language :: Python :: 3.11',
-    'License :: OSI Approved :: MIT License',
+    'License :: OSI Approved :: GPL-3.0 License',
     'Operating System :: OS Independent'
   ],
-  keywords='example python',
+  keywords='progress bar',
   project_urls={
-    'Documentation': 'link'
+    'Documentation': 'https://github.com/NoromTin/nobar/blob/main/README.md'
   },
-  python_requires='>=3.7'
+  python_requires='>=3.0'
 )

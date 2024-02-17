@@ -1,13 +1,17 @@
+nobar
+
 - Why make a new progress bar?
 - To have the right one! Pythonic, plain, which can be used)
 
+Quick start:
 
 pip install nobar
 
+Examples:
+
+```
 from nobar import nobar
 
-How to:
-```
 # With init. You'll see left itetations and time
 nobar('taskname', 3000)
 for i in range(3000):
