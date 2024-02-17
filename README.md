@@ -7,9 +7,8 @@ pip install nobar
 from nobar import nobar
 
 How to:
-
-# With init. You'll see left itetations and time
 ```
+# With init. You'll see left itetations and time
 nobar('taskname', 3000)
 for i in range(3000):
     nobar('taskname')
