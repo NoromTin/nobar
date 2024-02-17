@@ -9,11 +9,12 @@ from nobar import nobar
 How to:
 
 # With init. You'll see left itetations and time
+```
 nobar('taskname', 3000)
 for i in range(3000):
     nobar('taskname')
     sleep(0.02)
-    
+
 # Without init. Only Passed 
 for i in range(3000):
     nobar('taskname')
@@ -27,7 +28,7 @@ for i in range(3000):
     if i%3 == 0:
         nobar('task_2')
     sleep(0.02)
-
+```
 
 More arguments in the class
 
