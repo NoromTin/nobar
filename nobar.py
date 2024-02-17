@@ -1,3 +1,6 @@
+from time import time
+from datetime import datetime, UTC
+
 class Progress_data():
 
     def __init__(self):

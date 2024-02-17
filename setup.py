@@ -6,7 +6,7 @@ def readme():
 
 setup(
   name='nobar',
-  version='1.0.0',
+  version='1.0.2.1',
   author='NoromTin',
   author_email='aninelo@gmail.com',
   description='Usefull progress "bar"',
@@ -17,7 +17,7 @@ setup(
   install_requires=['requests>=2.25.1'],
   classifiers=[
     'Programming Language :: Python :: 3.11',
-    'License :: OSI Approved :: GPL-3.0 License',
+    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     'Operating System :: OS Independent'
   ],
   keywords='progress bar',
