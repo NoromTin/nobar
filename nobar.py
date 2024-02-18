@@ -1,5 +1,6 @@
 from time import time
-from datetime import datetime, UTC
+from datetime import datetime, timezone
+UTC = timezone.utc
 
 class Progress_data():
 
@@ -16,6 +17,7 @@ class Progress_data():
     def sec_to_hmsms(seconds):
         return datetime.fromtimestamp(seconds, UTC).strftime('%H:%M:%S.%f')[:-3]
         
+    @staticmethod
     def get_caller_loop_lenght(self):
         # too difficult todo
         pass
