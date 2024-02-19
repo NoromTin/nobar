@@ -6,15 +6,15 @@ def readme():
 
 setup(
   name='nobar',
-  version='1.0.2.6',
+  version='1.0.2.12',
   author='NoromTin',
   author_email='aninelo@gmail.com',
   description='Usefull progress "bar"',
   long_description=readme(),
   long_description_content_type='text/markdown',
   url='https://github.com/NoromTin/nobar',
-  packages= [''],#find_packages() ,
-  # package_dir = {'':''},
+  packages= {'nobar'}, # find_packages() ,
+  #package_dir = {'':'nobar'},
   install_requires=['requests>=2.25.1'],
   classifiers=[
     'Programming Language :: Python :: 3',

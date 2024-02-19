@@ -12,18 +12,25 @@ Examples:
 ```
 from nobar import nobar
 
-# With init. You'll see left itetations and time
-nobar('taskname', 3000)
-for i in range(3000):
-    nobar('taskname')
-    sleep(0.02)
+# With init. You'll see itetations and time left
 
-# Without init. Only Passed 
+nobar('task_1', 3000)
 for i in range(3000):
-    nobar('taskname')
+    nobar('task_1')
     sleep(0.02)
     
+>>> task_1  127 of 3000    passed : 00:00:21    left: 00:08:27    avg: 00:00:00.169
+
+# Without init. Only Passed 
+
+for i in range(3000):
+    nobar('task_2')
+    sleep(0.02)
+    
+>>> task_2  150 of n/a    passed : 00:00:13    left: n/a    avg: 00:00:00.088
+
 # Mixed. Few bars simultaneously.
+
 nobar('task_1',3000)
 nobar('task_2')
 for i in range(3000):
