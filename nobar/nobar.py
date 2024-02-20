@@ -15,7 +15,7 @@ class Progress_data():
         
         self.bar_txt = None
         
-        self.fill_min_len = 4
+        # self.fill_min_len = 4
     
     @staticmethod
     def sec_to_hms(seconds):
@@ -44,7 +44,8 @@ class Progress_data():
         return len(str(int_num))
         
     def fill_len(self,i_max):
-        return max(self.num_len(i_max), self.fill_min_len)
+        return self.num_len(i_max)
+        # return max(self.num_len(i_max), self.fill_min_len)
         
     def insert(self, pr_name, current_time, i_start, i_max):
     
@@ -55,12 +56,11 @@ class Progress_data():
         i_current = self.d[pr_name]['i_current'] + 1
         
         # i_max was changed
-        if i_max > i_current:
-            pr.d[pr_name]['i_max'] = i_max
-        elif i_max != -1:
-            print('unable to set Max i smaller then Current i')
-        else:
-            pass
+        if i_max != -1:
+            if i_max > i_current:
+                pr.d[pr_name]['i_max'] = i_max
+            else:
+                print('unable to set Max i smaller then Current i')
         
         # i_start was changed
         if i_start != 1:
@@ -71,7 +71,7 @@ class Progress_data():
         time_last = self.d[pr_name]['time_last']
         
         # calculate time_start for non inititialized, at the second nobar  call 
-        if i_max == -1 and i_current == 2:
+        if pr.d[pr_name]['i_max'] == -1 and i_current == 2:
             self.d[pr_name]['time_start'] = self.current_time - 2*(self.current_time - time_last)
         
         self.d[pr_name]['time_passed_prev'] = time_last
@@ -85,7 +85,7 @@ class Progress_data():
     
         i_max = self.d[pr_name]["i_max"]
         fill_len = pr.fill_len(i_max)
-        self.bar_txt = f'{pr_name}  {" "*(fill_len-1)}0 / {i_max}  pas: 00:00:00   lef: --:--:--   tot: --:--:--   las --:--:--   avg --:--:--'
+        self.bar_txt = f'{pr_name}  {" "*(fill_len-1)}0 / {i_max}  pas 00:00:00   lef --:--:--   tot --:--:--   las --:--:--   avg --:--:--'
     
     def gen_txt_first_noninited(self,pr_name):
     
@@ -99,31 +99,35 @@ class Progress_data():
         
         i_passed            = p["i_current"]
         i_max               = p['i_max']
-        time_passed         = self.current_time - p['time_start']
+        time_passed         = p['time_last'] - p['time_start']
         time_passed_str     = self.sec_to_hms(time_passed)
 
         time_passed_prev    = p['time_passed_prev']
         
 
         fill_len    = pr.fill_len(i_max)
-        fill_len_i  = fill_len - self.num_len(i_passed)
+        len_i       = self.num_len(i_passed)
+        fill_len_i  = fill_len - len_i
         fill_len_m  = fill_len - self.num_len(i_max)
-
+        
+        
+        
         if i_max == -1:
             time_left_str   = '--:--:--'
             time_total_str  = '--:--:--'
-            i_max_str       = '-'*fill_len
+            i_max_str       = '-'* len_i
             t_last_str      = '-.---'
             avg_str         = '-.---'
         else:
-            time_left       = time_passed / i_passed * i_max
-            time_left_str   = self.time_zero_trim(self.sec_to_hms(time_left))
-            i_max_str       = ' '*fill_len_m + str(i_max)
-            time_total      = time_passed + time_left
-            time_total_str  = self.time_zero_trim(self.sec_to_hms(time_total))
-        t_last_str      = self.time_zero_trim(self.sec_to_hmsms(self.current_time - time_passed_prev), trim_spaces = True)
+            time_total          = time_passed / i_passed * i_max
+            time_total_str      = self.sec_to_hms(time_total)
+            i_max_str           = str(i_max)
+            # i_max_str           = ' '*fill_len_m + str(i_max)
+            time_left           = time_total - time_passed
+            time_left_str      = self.sec_to_hms(time_left)
+        t_last_str              = self.time_zero_trim(self.sec_to_hmsms(p['time_last'] - time_passed_prev), trim_spaces = True)
         avg_str = self.time_zero_trim(self.sec_to_hmsms(time_passed / i_passed), trim_spaces = True)
-        self.bar_txt = f'{pr_name}  {" "*(fill_len_i)}{i_passed} / {i_max_str}  pas {time_passed_str}   lef {time_left_str}   tot {time_total_str}   las {t_last_str}   avg {avg_str}' # 
+        self.bar_txt = f'{pr_name}   {" "*(fill_len_i)}{i_passed} / {i_max_str}   pas {time_passed_str}   lef {time_left_str}   tot {time_total_str}   las {t_last_str}   avg {avg_str}' # 
         
     def print_init(self,pr_name):
     
@@ -135,31 +139,31 @@ class Progress_data():
         self.gen_txt_first_noninited(pr_name)
         self.print_out()
         
-    def print_upd(self,pr_name):
+    def print_upd(self, pr_name, force_new_line=False):
     
         self.gen_txt_upd(pr_name)
-        self.print_out(is_last =  self.d[pr_name]['i_current']>=self.d[pr_name]['i_max'] )
+        self.print_out(is_last =  (self.d[pr_name]['i_current']>=self.d[pr_name]['i_max'] and self.d[pr_name]['i_max'] != -1  or force_new_line) )
 
     def print_out(self, is_last=False):
     
         self.last_print_time = self.current_time
-        print(self.bar_txt, end='\r', flush=True if is_last else False)
+        print(self.bar_txt, end='\r' if not is_last else None, flush=True if is_last else False)
         
     def print_all(self):
     
         # print all passed
         for pr_name in self.d.keys():
-            self.gen_bar_txt(pr_name)
-            self.print_upd()
+            self.gen_txt_upd(pr_name)
+            self.print_upd(pr_name, force_new_line=True)
 
     # reserved
     def get_caller_loop_lenght(self):
-        # too difficult todo
+        # too hard todo
         pass
 
 pr = Progress_data()
 
-def nobar(pr_name, i_max = -1, delete = False, i_start = 1):
+def nobar(pr_name= '', i_max=-1, delete=False, i_start=1, print_all=False):
     
     pr.current_time = time()
     
@@ -171,23 +175,31 @@ def nobar(pr_name, i_max = -1, delete = False, i_start = 1):
         else:
             print('wrong progress name')
             return
+            
+    # print_all
+    if print_all:
+        pr.print_all()
+        return
 
     # data
     if pr_name in pr.d:
         # update
         pr.update(pr_name,i_start,i_max)
         # print
-        # skipping by refresh rate
-        if pr.current_time - pr.last_print_time < pr.min_print_period:
+        # skipping by refresh rate, except last iteration
+        if pr.current_time - pr.last_print_time < pr.min_print_period and pr.d[pr_name]['i_current'] < pr.d[pr_name]['i_max']:
             return
         pr.print_upd(pr_name)
 
     else:
         # insert (new one)
-        pr.insert(pr_name, pr.current_time, i_start, i_max)
-        # print
+        
         if i_max >= 0:
+            # initialized
+            pr.insert(pr_name, pr.current_time, i_start-1, i_max)
             pr.print_init(pr_name)
         else:
+            # noninitialized
+            pr.insert(pr_name, pr.current_time, i_start, i_max)
             pr.print_first_noninited(pr_name)
         return

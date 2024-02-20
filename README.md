@@ -11,34 +11,34 @@ Examples:
 
 ```
 from nobar import nobar
+from time import sleep
 
 # With init. You'll see itetations and time left
 
-nobar('task_1', 3000)
-for i in range(3000):
+nobar('task_1', 50)
+for i in range(50):
+    sleep(0.8)
     nobar('task_1')
-    sleep(0.02)
     
->>> task_1  127 of 3000    passed : 00:00:21    left: 00:08:27    avg: 00:00:00.169
+>>> task_1   50 / 50   pas 00:00:46   lef 00:00:00   tot 00:00:46   las 0.801   avg 0.922
+
+
 
 # Without init. Only Passed 
 
-for i in range(3000):
+for i in range(800):
+    sleep(0.02)
     nobar('task_2')
-    sleep(0.02)
     
->>> task_2  150 of n/a    passed : 00:00:13    left: n/a    avg: 00:00:00.088
+>>> task_2   800 / ---   pas 00:00:16   lef --:--:--   tot --:--:--   las 0.020   avg 0.020
 
-# Mixed. Few bars simultaneously.
 
-nobar('task_1',3000)
-nobar('task_2')
-for i in range(3000):
-    nobar('task_1')
-    if i%3 == 0:
-        nobar('task_2')
-    sleep(0.02)
+
+# Previous data saved
+
+nobar(print_all=True)
+
+>>> task_1   50 / 50   pas 00:00:46   lef 00:00:00   tot 00:00:46   las 0.801   avg 0.922
+>>> task_2   800 / ---   pas 00:00:16   lef --:--:--   tot --:--:--   las 0.020   avg 0.020
 ```
-
-More arguments in the class
 

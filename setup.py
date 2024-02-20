@@ -6,7 +6,7 @@ def readme():
 
 setup(
   name='nobar',
-  version='1.0.2.12',
+  version='1.0.2.17',
   author='NoromTin',
   author_email='aninelo@gmail.com',
   description='Usefull progress "bar"',
